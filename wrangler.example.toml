@@ -1,0 +1,21 @@
+# Copy to wrangler.toml and edit. wrangler.toml is gitignored so your routes
+# and account details stay out of the repo.
+name = "mcp-proxy"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+# Optional: serve on your own domain instead of *.workers.dev
+# routes = [{ pattern = "mcp.example.com", custom_domain = true }]
+
+[vars]
+# Route name -> upstream MCP endpoint. Each route becomes its own connector at
+# https://<your-worker>/<route>/<upstream path>, e.g. /notion-work/mcp.
+ROUTES = '''
+{
+  "notion-work":     { "upstream": "https://mcp.notion.com/mcp", "name": "Notion (work)" },
+  "notion-personal": { "upstream": "https://mcp.notion.com/mcp", "name": "Notion (personal)" }
+}
+'''
+
+# PROXY_SECRET is a secret, not a var. Set it with:
+#   openssl rand -base64 48 | npx wrangler secret put PROXY_SECRET
